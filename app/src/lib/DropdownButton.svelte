@@ -6,6 +6,8 @@
     export let options: string[] = [];
     export let optionIcons: string[] = [];
     export let onClick: (option: string) => void = () => {};
+    export let color: string = 'var(--main-color)';
+    export let textColor: 'light' | 'dark' = 'light';
 
     let isDropdownOpen = false;
     let onHover = false;
@@ -24,8 +26,12 @@
     on:mouseenter={() => {onHover = true}}
     on:mouseleave={() => {onHover = false}}>
 <button
-    class="btn"
-    style={`${isActive ? '' : 'pointer-events: none !important; background-color: var(--main-color-dark-2); opacity: 0.7;'}`}
+    class={`btn ${textColor === 'dark' ? 'dark-txt' : 'light-txt'}`}
+    style={`${(isActive ?
+            `background-color: ${color};`
+        :
+            'pointer-events: none !important; background-color: var(--main-color-dark-2); opacity: 0.7;'
+    )}`}
     on:click={() => {isDropdownOpen = !isDropdownOpen}}>
     {#if icon}
         <span class="main-icon">
@@ -114,7 +120,6 @@
         height: 15px;
         margin: 0 0 -3px 0;
         fill: none;
-        stroke: rgba(255, 255, 255, 0.9);
         stroke-width: 2.4px;
         stroke-linejoin: round;
     }
@@ -125,8 +130,6 @@
     .btn {
         padding: 0;
         display: inline-flex;
-        color: rgba(255, 255, 255, 0.9);
-        background-color: var(--main-color);
         border: none;
         border-radius: 50px;
         cursor: pointer;
@@ -137,15 +140,19 @@
     .btn:hover {
         filter: brightness(1.05);
     }
-    .main-text {
+    .btn.dark-txt {
+        color: rgba(0, 0, 0, 0.9);
+    }
+    .btn.light-txt {
         color: rgba(255, 255, 255, 0.9);
+    }
+    .main-text {
         padding: 8.5px 14px 9px 12px;
         font-weight: 500;
     }
     .main-icon {
         width: 18px;
         height: 18px;
-        color: rgba(255, 255, 255, 0.9);
         padding: 8px 6px 13px 8px;
         border-right: solid 2px rgba(0, 0, 0, 0.04);
         margin: 0 -2px -5px 0;

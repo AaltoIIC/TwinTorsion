@@ -3,15 +3,15 @@
 </script>
 <div class="main-header">
     <a href="/" class="logo-cont">
-        <img class="main-logo" src="./../icon.svg" alt="OpenTorsion Editor Logo">
-        OpenTorsion Editor <sub>{version}</sub>
+        <img class="main-logo" src="./../icon.svg" alt="DigiTwin Editor Logo">
+        DigiTwin Editor <sub>{version}</sub>
     </a>
     <p class="links">
-        <a href="https://github.com/AaltoIIC/OpenTorsion-Interface/wiki/User-Guide">
+        <a href="https://github.com/AaltoIIC/DigiTwin-Editor/wiki/User-Guide">
             User Guide
         </a>
-        <a href="https://github.com/Aalto-Arotor/openTorsion">
-            OpenTorsion GitHub
+        <a href="https://github.com/AaltoIIC/DigiTwin-Editor">
+            GitHub
         </a>
         <a href="https://www.aalto.fi/en/aiic">
             Aalto IIC

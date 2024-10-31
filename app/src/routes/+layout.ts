@@ -9,7 +9,10 @@ const mobilePath = '/mobile';
 
 export function load() {
     if (browser) {
-      if (window.innerWidth < minWidth && window.location.pathname !== mobilePath) {
+      if (window.innerWidth < minWidth &&
+         (window.location.pathname !== mobilePath &&
+          window.location.pathname !== `${mobilePath}/`
+         )) {
         window.location.href = mobilePath;
       }
     }

@@ -48,7 +48,7 @@
     <div class="main-pdf-cont" bind:this={cont}>
         <span class="logo-cont">
             <img class="main-logo" src="{base}/icon.svg" alt="logo">
-            OpenTorsion Editor
+            DigiTwin Editor
         </span>
         <div class="main-header box">
             <div class="main-text">
@@ -90,7 +90,7 @@
             {/each}
         {/if}
         <footer>
-            <p>OpenTorsion Editor</p>
+            <p>DigiTwin Editor</p>
             <p>2024, Aalto IIC</p>
         </footer>
     </div>

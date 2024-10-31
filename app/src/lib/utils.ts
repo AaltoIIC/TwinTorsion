@@ -279,7 +279,7 @@ export const fetchComponents = async (twinBaseUrl: string) => {
         }
         const json = await response.json();
         const twinUrls = json.twins.map((twin: any) => twin.url);
-        
+        console.log(twinBaseUrl)
 
         const components: {id: string, component: ComponentType}[] = [];
 

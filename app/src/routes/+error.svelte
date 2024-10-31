@@ -5,7 +5,7 @@
     import { goto } from '$app/navigation';
 </script>
 <svelte:head>
-    <title>Error | OpenTorsion Editor</title>
+    <title>Error | DigiTwin Editor</title>
 </svelte:head>
 <Header />
 <div class="main-page">
