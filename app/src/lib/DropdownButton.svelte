@@ -2,7 +2,6 @@
     import { onMount } from 'svelte';
     export let icon: string = '';
     export let isActive: boolean = true;
-    export let lightMode: boolean = false;
     export let options: string[] = [];
     export let optionIcons: string[] = [];
     export let onClick: (option: string) => void = () => {};
@@ -40,7 +39,7 @@
     {/if}
     <span class="main-text" style="{icon ? '' : 'padding-left: 14px !important;'}">
         <slot></slot>
-        <svg class="icon-dropdown" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <svg class="icon-dropdown" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
           </svg>
     </span>
@@ -138,7 +137,7 @@
         font-family: 'Inter', sans-serif;
     }
     .btn:hover {
-        filter: brightness(1.05);
+        background-image: linear-gradient(to bottom, rgba(255,255,255,0.12), rgba(255,255,255,0.12));
     }
     .btn.dark-txt {
         color: rgba(0, 0, 0, 0.9);
@@ -154,7 +153,7 @@
         width: 18px;
         height: 18px;
         padding: 8px 6px 13px 8px;
-        border-right: solid 2px rgba(0, 0, 0, 0.04);
+        border-right: solid 2px rgba(0, 0, 0, 0.025);
         margin: 0 -2px -5px 0;
     }
 </style>

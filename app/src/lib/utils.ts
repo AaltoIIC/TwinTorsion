@@ -252,7 +252,7 @@ export const titleCase = (str: string) => {
     return splitStr.join(' '); 
  }
 
-export const isTwinBaseUrl = async (url: string) => {
+export const isTwinbaseUrl = async (url: string) => {
     try {
         const response = await fetch(`${url}/index.json`);
         if (!response.ok) {
@@ -269,8 +269,8 @@ export const isTwinBaseUrl = async (url: string) => {
     }
 }
 
-export const fetchComponents = async (twinBaseUrl: string) => {
-    const trimmedUrl = twinBaseUrl.endsWith('/') ? twinBaseUrl.slice(0, -1) : twinBaseUrl;
+export const fetchComponents = async (twinbaseUrl: string) => {
+    const trimmedUrl = twinbaseUrl.endsWith('/') ? twinbaseUrl.slice(0, -1) : twinbaseUrl;
     
     try {
         const response = await fetch(`${trimmedUrl}/index.json`);
@@ -279,10 +279,8 @@ export const fetchComponents = async (twinBaseUrl: string) => {
         }
         const json = await response.json();
         const twinUrls = json.twins.map((twin: any) => twin.url);
-        console.log(twinBaseUrl)
 
         const components: {id: string, component: ComponentType}[] = [];
-
         await Promise.all(twinUrls.map(async (url: string) => {
             const response = await fetch(`${url}/index.json`);
             if (response.ok) {

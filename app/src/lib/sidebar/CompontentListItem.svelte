@@ -21,12 +21,12 @@
     export let id = "";
 
     let twinRepo = '';
-    let twinBaseUrl = '';
+    let twinbaseUrl = '';
     if (type === "twin") {
         const org = id.split('/')[2].split('.')[0];
         const repo = id.split('/')[3];
         twinRepo = trimText(`${org}/${repo}`, 25);
-        twinBaseUrl = `https://${org}.github.io/${repo}`;
+        twinbaseUrl = `https://${org}.github.io/${repo}`;
     }
 
     const onDragStart = (event: DragEvent) => {
@@ -94,7 +94,7 @@
             {#if type === "custom"}
                 <p>Custom Component</p>
             {:else if type === "twin"}
-                <a class="twin-repo" href={twinBaseUrl} target="_blank">
+                <a class="twin-repo" href={twinbaseUrl} target="_blank">
                     {twinRepo}
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" />
@@ -197,21 +197,5 @@
         overflow: hidden;
         mask-image: linear-gradient(90deg, rgba(0,0,0,1) 86%, rgba(0,0,0,0) 100%);
         mask-size: cover;
-    }
-    button {
-        color: rgba(255, 255, 255, 0.9);
-        background-color: rgb(30, 30, 30);
-        cursor: pointer;
-        transition: .2s;
-        background-color: rgb(34, 34, 34);
-        font-family: "Inter", sans-serif;
-        font-weight: 550;
-        font-size: 14px;
-        border-radius: 100px;
-        padding: 9px 12px 11px 12px;
-        border: 1px solid rgba(255, 255, 255, 0.4);
-    }
-    button:hover {
-        border: 1px solid rgba(255, 255, 255, 0.8);
     }
 </style>
