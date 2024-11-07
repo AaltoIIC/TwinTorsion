@@ -7,7 +7,8 @@
     } from "$lib/stores/stores";
     import {
         trimText,
-        isTwinbaseUrl
+        isTwinbaseUrl,
+        trimUrl
     } from "$lib/utils";
     import type { SvelteComponent } from "svelte";
 
@@ -27,7 +28,7 @@
     const validateNewUrlForm = (e: Event) => {
         if (!(e.target as HTMLInputElement).checkValidity() ||
             currentNewUrl === '' ||
-            $twinbases.includes(currentNewUrl) ||
+            $twinbases.includes(trimUrl(currentNewUrl)) ||
             currentNewUrl === twinbaseUrl) {
             isInputFormatValid = false;
         } else {
@@ -41,7 +42,7 @@
         isTwinbaseUrl(currentNewUrl).then((isValid) => {
             if (isValid) {
                 twinbases.update((twinbases) => {
-                    twinbases.push(currentNewUrl);
+                    twinbases.push(trimUrl(currentNewUrl));
                     return twinbases;
                 });
                 notification.set({

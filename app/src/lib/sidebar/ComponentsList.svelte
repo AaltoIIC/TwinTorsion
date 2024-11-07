@@ -11,23 +11,49 @@
     import { goto } from "$app/navigation";
     import { twinbaseUrl } from "../../config";
     import { 
-        fetchComponents,
-        trimText
+        fetchComponents
      } from "$lib/utils";
     import TwinbasesPopup from "./TwinbasesPopup.svelte";
+    import ComponentFilter from "./ComponentFilter.svelte";
     import type { SvelteComponent } from "svelte";
 
     let componentInput: HTMLInputElement;
     let twinbasesPopup: SvelteComponent;
+    let checkedSources: string[] = [];
 
-    let shownComponents =  Array.from($customComponents.entries())
+    // Component lists
+    let sysCustomComponents =  Array.from($customComponents.entries())
                                 .filter(([key, val]) => key.startsWith(`${$currentSystemJSON.id}-`))
-                                .reverse() as [string, ComponentType][]
+                                .map(([key, val]) => { return {id: key, component: val}})
+                                .reverse()
     customComponents.subscribe(value => {
-        shownComponents = Array.from(value.entries())
-            .filter(([key, val]) => key.startsWith(`${$currentSystemJSON.id}-`))
-            .reverse() as [string, ComponentType][]
+        sysCustomComponents = Array.from(value.entries())
+                                .filter(([key, val]) => key.startsWith(`${$currentSystemJSON.id}-`))
+                                .map(([key, val]) => { return {id: key, component: val}})
+                                .reverse()
     })
+    let digitalTwins: any[] = [];
+    const fetchAllTwins = async (twinbases: string[]) => {
+        let newDigitalTwins: any[] = [];
+        await Promise.all(twinbases.map(async (url) => {
+            let components = await fetchComponents(url);
+            newDigitalTwins = newDigitalTwins.concat(components);
+        }))
+        digitalTwins = newDigitalTwins;
+    }
+    fetchAllTwins([...$twinbases, twinbaseUrl]);
+    twinbases.subscribe(value => {
+        fetchAllTwins([...value, twinbaseUrl]);
+    })
+
+    let filteredTwins: any [] = [];
+    $: filteredTwins = digitalTwins.filter((comp) => {
+            let twinId = comp.id.split('/').slice(0, -1).join('/').toLowerCase();
+            return checkedSources.includes(twinId);
+        });
+
+    $: console.log(digitalTwins);
+    $: console.log(filteredTwins);
 
     const handleNewComponent = (option: string) => {
         if (option === 'Create New') {
@@ -36,27 +62,7 @@
             componentInput.click();
         }
     }
-
-    const twinbaseNames = [twinbaseUrl, ...$twinbases].map((url) => {
-        try {
-            let org = url.split('/')[2].split('.')[0];
-            let repo = url.split('/')[3];
-            return trimText(`${org}/${repo}`,40);
-        } catch {
-            return trimText(url, 22);
-        }
-    });
-    let digitalTwins: any[] = [];
-    $twinbases.forEach((url) => {
-        fetchComponents(url).then((components) => {
-            digitalTwins = digitalTwins.concat(components);
-        })
-    })
-    fetchComponents(twinbaseUrl).then((components) => {
-        digitalTwins = digitalTwins.concat(components);
-    })
 </script>
-
 <div class="component-cont">
     <div class="component-upper">
         <h3>Components:</h3>
@@ -88,32 +94,15 @@
                 </button>
             </span>           
     </div>
-    <div class="filters">
-        <p>Showing <span class="filter-selection">all components</span></p>
-        <button class="filter-btn hidden-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-            </svg>              
-        </button>
-        <div class="filter-url-list">
-            <div class="filter-entry">
-                <input type="checkbox" />
-                <p>Custom Components</p>
-            </div>
-            {#each [...twinbaseNames] as url}
-                <div class="filter-entry">
-                    <input type="checkbox" />
-                    <p>{url}</p>
-                </div>
-            {/each}
-        </div>
-    </div>
+    <ComponentFilter on:update={(e) => {checkedSources = e.detail}} />
     <div class="component-list">
-        {#each shownComponents as [id, component] (id)}
-            <ComponentListItem type="custom" id={id} data={component} />
-        {/each}
+        {#if checkedSources.includes('custom components')}
+            {#each sysCustomComponents as {id, component} (id)}
+                <ComponentListItem type="custom" id={id} data={component} />
+            {/each}
+        {/if}
         {#if digitalTwins.length > 0}
-            {#each digitalTwins as {id, component}}
+            {#each filteredTwins as {id, component} (id)}
                 <ComponentListItem type="twin" id={id} data={component} />
             {/each}
         {:else}
@@ -125,73 +114,6 @@
 </div>
 <TwinbasesPopup bind:this={twinbasesPopup} />
 <style>
-    input[type="checkbox"]:checked {
-        background-size: cover;
-        padding: 2px;
-    }
-
-    input[type="checkbox"]:not(:disabled):checked {
-        border-color: var(--main-dark-color);
-        background-color: var(--main-dark-color);
-        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="rgba(255, 255, 255, 0.9)"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>');
-    }
-    input[type="checkbox"] {
-        box-sizing: border-box;
-        width: 14px;
-        height: 14px;
-        margin: 6px;
-        padding: 0;
-        border: solid 2px rgba(0, 0, 0, 0.12);
-        border-radius: 2px;
-        appearance: none;
-        background-color: transparent;
-        outline: none;
-        transition: outline 0.1s;
-    }
-    .filter-entry input {
-        margin-right: 10px;
-    }
-    .filter-entry {
-        display: flex;
-        align-items: center;
-        padding: 5px 10px;
-        cursor: pointer;
-    }
-    .filter-url-list {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        background-color: white;
-        border-bottom: var(--main-border);
-        border-top: var(--main-border);
-        box-sizing: border-box;
-        z-index: 10;
-    }
-    .filter-btn svg {
-        width: 16px;
-        height: 16px;
-        color: rgba(0, 0, 0, 0.8);
-        margin: 0 0 -4px -8px;
-    }
-    .filter-selection {
-        font-weight: 550;
-        color: var(--main-dark-color);
-    }
-    .filters {
-        padding: 10px 10px;
-        border-top: var(--main-border);
-        background-color: var(--main-grey-color);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        position: relative;
-    }
-    .filters p {
-        margin: 0;
-        font-size: 14px;
-        color: rgba(0, 0, 0, 0.8);
-    }
     .placeholder-list-elem {
         width: calc(100% - 12px);
         margin: 5px;

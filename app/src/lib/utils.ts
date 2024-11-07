@@ -250,7 +250,15 @@ export const titleCase = (str: string) => {
         splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);     
     }
     return splitStr.join(' '); 
- }
+}
+
+export const trimUrl = (url: string) => {
+    let trimmedUrl = url;
+    while (trimmedUrl.endsWith('/')) {
+        trimmedUrl = trimmedUrl.slice(0, -1);
+    }
+    return trimmedUrl.toLowerCase();
+}
 
 export const isTwinbaseUrl = async (url: string) => {
     try {
