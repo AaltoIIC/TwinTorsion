@@ -62,6 +62,7 @@
 <style>
     .option-text {
         line-height: 34px;
+        width: max-content;
     }
     .option-icon {
         display: block;
@@ -95,7 +96,8 @@
         top: 100%;
         left: 0;
         margin-top: 6px;
-        width: 162px;
+        width: fit-content;
+        max-width: 172px;
         padding: 0;
         background-color: white;
         transition: opacity 0.2s;

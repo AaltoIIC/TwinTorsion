@@ -84,7 +84,7 @@
                     name="component-file"
                     bind:this={componentInput}
                     on:change={importComponent}
-                    accept=".json">
+                    accept=".tors">
                 
                 <button class="twinbases-button"
                     on:click={() => {if (twinbasesPopup) {twinbasesPopup.open()}}}>

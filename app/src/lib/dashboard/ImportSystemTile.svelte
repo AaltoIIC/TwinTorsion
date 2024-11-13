@@ -35,7 +35,7 @@
     name="DDT-file"
     bind:this={fileInput}
     on:change={importSystem}
-    accept=".json"/>
+    accept=".tors"/>
 <style>
     .bg-icon * {
         width: 240px;

@@ -34,7 +34,7 @@ export const exportJSON = (json: any) => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = json.name + '.json';
+    a.download = json.name + '.tors';
     document.body.appendChild(a);
     a.click();
 
@@ -75,7 +75,7 @@ export const importSystem = (event: Event, createNew: boolean = true) => {
             
                 } else if (isAlmostComponentType(newJSON)) {
                     notification.set({
-                        message: "Imported JSON file is a component. Please import a system JSON file.",
+                        message: "Imported Tors file is a component. Please import a system JSON file.",
                         type: "error",
                         duration: 3000
                     });
@@ -84,7 +84,7 @@ export const importSystem = (event: Event, createNew: boolean = true) => {
                 }
             } catch (error) {
                 notification.set({
-                    message: "Imported JSON file is invalid. Please check the file and try again.",
+                    message: "Imported Tors file is invalid. Please check the file and try again.",
                     type: "error",
                     duration: 3000
                 });
@@ -128,7 +128,7 @@ export const importComponent = (event: Event, createNew: boolean = true) => {
                     }
                 } else if (isAlmostSystemType(newJSON)) {
                     notification.set({
-                        message: "Imported JSON file is a system. Please import a component JSON file.",
+                        message: "Imported Tors file is a system. Please import a component JSON file.",
                         type: "error",
                         duration: 3000
                     });
@@ -137,7 +137,7 @@ export const importComponent = (event: Event, createNew: boolean = true) => {
                 }
             } catch (error) {
                 notification.set({
-                    message: "Imported JSON file is invalid. Please check the file and try again.",
+                    message: "Imported Tors file is invalid. Please check the file and try again.",
                     type: "error",
                     duration: 3000
                 });

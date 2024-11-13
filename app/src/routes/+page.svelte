@@ -40,7 +40,7 @@
                         name="DDT-file"
                         bind:this={fileInput}
                         on:change={importSystem}
-                        accept=".json"/>
+                        accept=".tors"/>
                 </div>
             </div>
             <div class="ddt-cont">
