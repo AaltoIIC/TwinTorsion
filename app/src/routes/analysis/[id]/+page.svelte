@@ -85,7 +85,7 @@
     })
 </script>
 <svelte:head>
-    <title>Analysis | DigiTwin Editor</title>
+    <title>Analysis | TwinTorsion Editor</title>
 </svelte:head>
 <main>
     <div class="tiles-cont">

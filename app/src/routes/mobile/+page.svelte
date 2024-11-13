@@ -2,7 +2,7 @@
     import Header from '$lib/Header.svelte';
 </script>
 <svelte:head>
-    <title>Mobile | DigiTwin Editor</title>
+    <title>Mobile | TwinTorsion Editor</title>
     <meta name="robots" content="noindex">
 </svelte:head> 
 <Header />
@@ -10,11 +10,11 @@
     <img class="illustration" src="./../error.png" alt="Error illustration">
     <div class="error-desc">
         <h4>Use the Editor on Desktop</h4>
-        <p>DigiTwin Editor is not available on mobile devices. Please use a desktop or laptop to access the editor.</p>
+        <p>TwinTorsion Editor is not available on mobile devices. Please use a desktop or laptop to access the editor.</p>
     </div>
 </div>
 <footer>
-    <p>DigiTwin Editor</p>
+    <p>TwinTorsion Editor</p>
     <p>2024, Aalto IIC</p>
 </footer>
 <style>

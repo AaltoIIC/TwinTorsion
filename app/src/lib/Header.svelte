@@ -3,14 +3,14 @@
 </script>
 <div class="main-header">
     <a href="/" class="logo-cont">
-        <img class="main-logo" src="./../icon.svg" alt="DigiTwin Editor Logo">
-        DigiTwin Editor <sub>{version}</sub>
+        <img class="main-logo" src="./../icon.svg" alt="TwinTorsion Editor Logo">
+        TwinTorsion Editor <sub>{version}</sub>
     </a>
     <p class="links">
-        <a href="https://github.com/AaltoIIC/DigiTwin-Editor/wiki/User-Guide">
+        <a href="https://github.com/AaltoIIC/TwinTorsion/wiki/User-Guide">
             User Guide
         </a>
-        <a href="https://github.com/AaltoIIC/DigiTwin-Editor">
+        <a href="https://github.com/AaltoIIC/TwinTorsion">
             GitHub
         </a>
         <a href="https://www.aalto.fi/en/aiic">
