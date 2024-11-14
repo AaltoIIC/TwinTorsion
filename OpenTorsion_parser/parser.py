@@ -115,12 +115,12 @@ def parse(json):
     starting_components = list(set(connection_starts) - set(connection_ends))
 
     if len(starting_components) > 1:
-        raise ValueError("JSON contains more than one group of connected components.")
+        raise ValueError("Tors file contains more than one group of connected components.")
     elif len(starting_components) == 0:
         if (len(components) == 1):
             starting_components = [components[0]['name']]
         else:
-            raise ValueError("JSON contains no connected components.")
+            raise ValueError("Tors file contains no connected components.")
 
     starting_component = find_component_by_name(starting_components[0], components)
 

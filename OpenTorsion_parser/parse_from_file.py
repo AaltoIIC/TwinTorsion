@@ -6,9 +6,9 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from OpenTorsion_parser.parser import parse
 
-json_path = './examples/test-twodisks.json'
+file_path = './examples/test-twodisks.tors'
 
-with open(json_path) as input_json:
+with open(file_path) as input_json:
     input_data = json.load(input_json)
     assembly, excitations = parse(input_data)
     print(excitations)
