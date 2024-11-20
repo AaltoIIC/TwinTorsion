@@ -64,6 +64,7 @@
         height: 175px;
         mask-image: linear-gradient(rgba(0,0,0,1) 86%, rgba(0,0,0,0) 100%);
         position: relative;
+        margin: auto;
     }
     .empty-system-txt {
         font-size: 14px;
@@ -101,5 +102,11 @@
     }
     .system-info {
         padding: 0 14px 14px 14px;
+    }
+    @media (max-width: 492px) {
+        .tile {
+            width: 100%;
+            margin: 0 0 15px 0;
+        }
     }
 </style>

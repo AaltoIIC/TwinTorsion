@@ -1,18 +1,32 @@
 <script lang="ts">
+    import { goto } from '$app/navigation';
+    import Link from '$lib/Link.svelte';
+
     export let name: string;
-    export let link: string;
-    export let description: string;
     export let icon: string;
+
+    export let texts: string[];
+    export let links: string[];
 </script>
-<a href={link} target="_blank">
-    <div class="resource-tile">
-        <h4>{name}</h4>
-        <p>{description}</p>
-        <span class="icon">
-            {@html icon}
-        </span>
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<div class="resource-tile">
+    <h4>{name}</h4>
+    <p>
+        <slot></slot>
+    </p>
+    <span class="icon">
+        {@html icon}
+    </span>
+    <div class="links-cont">
+        {#each texts as text, i}
+            <span class="link">
+                <Link text={text} url={links[i]} />
+            </span>
+        {/each}
     </div>
-</a>
+</div>
+
 <style>
     .icon {
         position: absolute;
@@ -24,13 +38,16 @@
     }
     .resource-tile {
         padding: 20px;
+        box-sizing: border-box;
         border: var(--main-border);
         border-radius: var(--main-border-radius);
         margin: 0 0 15px 15px;
         overflow: hidden;
-        height: 180px;
+        height: 220px;
         position: relative;
         background: linear-gradient(rgba(0,0,0,0) 60%, var(--main-color-tr-2) 100%);
+        cursor: pointer;
+        flex: 1 1 228px;
     }
     .resource-tile:hover {
         background-color: var(--main-hover-color);
@@ -42,9 +59,7 @@
     h4, p {
         margin: 4px;
     }
-    a {
-        text-decoration: none;
-        flex-basis: 0;
-        flex-grow: 1;
+    .inactive {
+        cursor: default;
     }
 </style>

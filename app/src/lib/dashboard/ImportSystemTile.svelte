@@ -87,4 +87,10 @@
         bottom: 14px;
         right: 14px;
     }
+    @media (max-width: 492px) {
+        .main-tile {
+            width: 100%;
+            margin: 0 0 15px 0;
+        }
+    }
 </style>

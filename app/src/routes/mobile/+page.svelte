@@ -4,8 +4,8 @@
 <svelte:head>
     <title>Mobile | TwinTorsion Editor</title>
     <meta name="robots" content="noindex">
-</svelte:head> 
-<Header />
+</svelte:head>
+<Header noTap />
 <div class="main-page">
     <img class="illustration" src="./../error.png" alt="Error illustration">
     <div class="error-desc">
@@ -20,7 +20,6 @@
 <style>
     .illustration {
         width: 300px;
-        height: fit-content;
     }
     .error-desc {
         padding: 0 20px 20px 20px;
