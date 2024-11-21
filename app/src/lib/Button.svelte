@@ -4,12 +4,13 @@
     export let lightMode: boolean = false;
     export let color: string = 'var(--main-color)';
     export let textColor: string = 'rgba(255, 255, 255, 0.9)';
+    export let border: boolean = false;
     export let onClick: () => void = () => {};
 </script>
 
 <button
     on:click={onClick}
-    class={`btn ${lightMode ? "lightmode" : ""} ${isActive ? '' : 'disabled'}`}
+    class={`btn ${lightMode ? "lightmode" : ""} ${isActive ? '' : 'disabled'} ${border ? 'border' : ''}`}
     style={`background-color: ${color}; color: ${textColor};`}>
     {#if icon}
         <span class="main-icon">
@@ -24,6 +25,9 @@
     .btn {
         padding: 0;
         display: inline-flex;
+    }
+    .btn.border {
+        border: var(--main-border);
     }
     .lightmode {
         box-shadow: var(--main-shadow);

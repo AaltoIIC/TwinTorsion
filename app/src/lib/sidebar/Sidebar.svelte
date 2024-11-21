@@ -7,14 +7,16 @@
         <img class="main-logo" src="{base}/icon.svg" alt="TwinTorsion Editor Logo">
         TwinTorsion Editor <sub>{version}</sub>
     </a>
-    <slot></slot>
-    <div class="lower-menu">
-        <a href="https://github.com/AaltoIIC/TwinTorsion/issues" target="_blank">
-            <svg class="icon-report" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
-              </svg>Report issue
-        </a>
-    </div>
+    <span>
+        <slot></slot>
+        <div class="lower-menu">
+            <a href="https://github.com/AaltoIIC/TwinTorsion/issues" target="_blank">
+                <svg class="icon-report" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                  </svg>Report issue
+            </a>
+        </div>
+    </span>
 </div>
 <style>
     .main-logo {
@@ -39,17 +41,19 @@
         color: rgba(0, 0, 0, 0.6);
     }
     .main-sidebar {
-        position: absolute;
-        top: 0;
-        left: 0;
         height: 100vh;
-        width: 360px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         border-right: var(--main-border);
+        -moz-user-select: -moz-none;
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
     }
     .lower-menu {
-        position: absolute;
-        bottom: 0;
-        left: 0;
         width: 100%;
         height: 34px;
         border-top: var(--main-border);

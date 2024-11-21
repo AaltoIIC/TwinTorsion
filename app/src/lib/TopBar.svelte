@@ -13,13 +13,16 @@
     .links, .name, .buttons {
         display: flex;
         align-items: center;
+        -moz-user-select: -moz-none;
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
     }
     .top-menu {
-        position: absolute;
-        top: 0;
-        left: 360px;
+        position: relative;
         height: 68px;
-        width: calc(100vw - 360px);
+        width: 100%;
         background-color: rgb(34,34,34);
         display: flex;
         justify-content: space-between;

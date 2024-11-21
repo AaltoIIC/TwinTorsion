@@ -11,12 +11,12 @@
             link: 'https://github.com/AaltoIIC/TwinTorsion/wiki/User-Guide'
         },
         {
-            name: 'GitHub',
-            link: 'https://github.com/AaltoIIC/TwinTorsion'
+            name: 'Docs',
+            link: 'https://github.com/AaltoIIC/TwinTorsion/wiki/Developer-Docs'
         },
         {
-            name: 'Aalto IIC',
-            link: 'https://www.aalto.fi/en/aiic'
+            name: 'GitHub',
+            link: 'https://github.com/AaltoIIC/TwinTorsion'
         }
     ];
 
