@@ -183,7 +183,11 @@
     <title>Component Editor | TwinTorsion Editor</title>
 </svelte:head>
 <div class="main-screen">
-    <Resize direction="horizontal" defaultFirstSize={360}>
+    <Resize 
+        direction="horizontal"
+        defaultFirstSize={360}
+        minFirstSize={275}
+        maxFirstSize={400}>
         <svelte:fragment slot="1">
             <Sidebar>
                 <ElementsList />
@@ -243,29 +247,39 @@
                     </Button>
                 </svelte:fragment>
             </TopBar>
-            <Resize direction="vertical" defaultSecondSize={220} minFirstSize={40}>
-                <svelte:fragment slot="1">
-                    <SvelteFlowProvider>
-                        <ComponentEditor />
-                    </SvelteFlowProvider>
-                </svelte:fragment>
-                <svelte:fragment slot="2">
-                    <Tabs bind:selectedTab={selectedEditor} tabs={["Table", "JSON"]} />
-                    {#if selectedEditor === "Table"}
-                        <TableEditor />
-                    {:else}
-                        <JSONEditor
-                            bind:this={JSONEditorComponent}
-                            bind:textContent={JSONEditorText}
-                            onInput={(text) => {isError = !handleJSONEditing(text, originalName)}} />
-                    {/if}
-                </svelte:fragment>
-            </Resize>
-        </svelte:fragment>
-    </Resize>
+            <div class="main-editor-cont">
+                <Resize
+                    direction="vertical"
+                    defaultSecondSize={220}
+                    minFirstSize={40}
+                    minSecondSize={32}>
+                    <svelte:fragment slot="1">
+                        <SvelteFlowProvider>
+                            <ComponentEditor />
+                        </SvelteFlowProvider>
+                    </svelte:fragment>
+                    <svelte:fragment slot="2">
+                        <Tabs bind:selectedTab={selectedEditor} tabs={["Table", "JSON"]} />
+                        {#if selectedEditor === "Table"}
+                            <TableEditor />
+                        {:else}
+                            <JSONEditor
+                                bind:this={JSONEditorComponent}
+                                bind:textContent={JSONEditorText}
+                                onInput={(text) => {isError = !handleJSONEditing(text, originalName)}} />
+                        {/if}
+                    </svelte:fragment>
+                </Resize>
+            </div>
+            </svelte:fragment>
+        </Resize>
 </div>
 <DialogBox bind:this={dialogBox} />
 <style>
+    .main-editor-cont {
+        height: calc(100% - 68px);
+        width: 100%;
+    }
     .link-element {
         color: rgba(255, 255, 255, 0.9);
         font-size: 14px;

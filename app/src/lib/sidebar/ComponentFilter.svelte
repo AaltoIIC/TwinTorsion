@@ -2,7 +2,6 @@
     import { createEventDispatcher } from 'svelte';
     import { twinbaseUrl } from "../../config";
     import { twinbases } from "$lib/stores/stores";
-    import { trimText } from "$lib/utils";
     import { onMount } from 'svelte';
 
     interface optionType {
@@ -15,9 +14,9 @@
         try {
             let org = url.split('/')[2].split('.')[0];
             let repo = url.split('/')[3];
-            return trimText(`${org}/${repo}`,40);
+            return `${org}/${repo}`;
         } catch {
-            return trimText(url, 22);
+            return url;
         }
     }
 
@@ -213,6 +212,23 @@
         justify-content: space-between;
         align-items: center;
     }
+    .filter-head p {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex-grow: 1;
+        flex-shrink: 1;
+    }
+    .filter-selection {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis; 
+    }
+    .filter-btn {
+        flex-grow: 0;
+        flex-shrink: 0;
+    }
+
     .filters {
         position: relative;
     }

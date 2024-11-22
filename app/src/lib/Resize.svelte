@@ -5,7 +5,9 @@
     export let defaultFirstSize: number | null = null;
     export let defaultSecondSize: number | null = null;
     export let minFirstSize: number | null = null;
+    export let maxFirstSize: number | null = null;
     export let minSecondSize: number | null = null;
+    export let maxSecondSize: number | null = null;
 
     let container: HTMLDivElement;
     let isResizing = false;
@@ -17,14 +19,24 @@
     const resizeEditor = (event: MouseEvent) => {
         if (direction === 'horizontal') {
             const newFirstSize = event.clientX - container.getBoundingClientRect().left;
-            if ((!minFirstSize || newFirstSize >= minFirstSize) &&
-                (!minSecondSize || container.getBoundingClientRect().width - newFirstSize >= minSecondSize)) {
+
+            const isMinFirstSizeValid = !minFirstSize || newFirstSize >= minFirstSize;
+            const isMinSecondSizeValid = !minSecondSize || container.getBoundingClientRect().width - newFirstSize >= minSecondSize;
+            const isMaxFirstSizeValid = !maxFirstSize || newFirstSize <= maxFirstSize;
+            const isMaxSecondSizeValid = !maxSecondSize || container.getBoundingClientRect().width - newFirstSize <= maxSecondSize;
+
+            if (isMinFirstSizeValid && isMinSecondSizeValid && isMaxFirstSizeValid && isMaxSecondSizeValid) {
                 firstSize = newFirstSize;
             }
         } else {
             const newFirstSize = event.clientY - container.getBoundingClientRect().top;
-            if ((!minFirstSize || newFirstSize >= minFirstSize) &&
-                (!minSecondSize || container.getBoundingClientRect().height - newFirstSize >= minSecondSize)) {
+
+            const isMinFirstSizeValid = !minFirstSize || newFirstSize >= minFirstSize;
+            const isMinSecondSizeValid = !minSecondSize || container.getBoundingClientRect().height - newFirstSize >= minSecondSize;
+            const isMaxFirstSizeValid = !maxFirstSize || newFirstSize <= maxFirstSize;
+            const isMaxSecondSizeValid = !maxSecondSize || container.getBoundingClientRect().height - newFirstSize <= maxSecondSize;
+
+            if (isMinFirstSizeValid && isMinSecondSizeValid && isMaxFirstSizeValid && isMaxSecondSizeValid) {
                 firstSize = newFirstSize;
             }
         }
@@ -68,13 +80,13 @@
                 height: 100%;
                 cursor: ${direction === 'horizontal' ? 'ew-resize' : 'ns-resize'};
                 position: absolute;
-                ${direction === 'horizontal' ? 'left' : 'top'}: -4px;
-                ${sizeProp}: 10px !important;
+                ${direction === 'horizontal' ? 'left' : 'top'}: -5px;
+                ${sizeProp}: 12px !important;
             `}>
 
         </div>
     </div>
-    <div class="child child-two" style={`${sizeProp}: calc(100% - ${firstSize + 6}px);`}>
+    <div class="child child-two" style={`${sizeProp}: calc(100% - ${firstSize + 2}px);`}>
         <slot name="2"></slot>
     </div>
 </div>

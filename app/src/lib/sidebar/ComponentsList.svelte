@@ -52,9 +52,6 @@
             return checkedSources.includes(twinId);
         });
 
-    $: console.log(digitalTwins);
-    $: console.log(filteredTwins);
-
     const handleNewComponent = (option: string) => {
         if (option === 'Create New') {
             goto('/component-editor');
@@ -114,6 +111,9 @@
 </div>
 <TwinbasesPopup bind:this={twinbasesPopup} />
 <style>
+    .component-cont {
+        min-width: 270px;
+    }
     .placeholder-list-elem {
         width: calc(100% - 12px);
         margin: 5px;
@@ -160,7 +160,7 @@
         position: relative;
     }
     .component-list {
-        width: 360px;
+        width: 100%;
         height: calc(100vh - 137px);
         overflow-y: scroll;
         background: white;

@@ -29,6 +29,7 @@
         display: flex;
         align-items: center;
         height: 68px;
+        flex-shrink: 0;
         text-decoration: none;
         font-weight: 550;
         margin: 0 16px;

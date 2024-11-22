@@ -14,6 +14,7 @@
     import Button from "$lib/Button.svelte";
     import { trimText } from "$lib/utils";
     import Link from "$lib/Link.svelte";
+    import { truncate } from "$lib/truncate";
     
     let dialogBox: SvelteComponent;
 
@@ -82,7 +83,7 @@
     <div class="component-info">
         <div>
             <h4>
-                <span class="comp-name">{trimText(data.name, 19)}</span>
+                <span class="comp-name" use:truncate={{ text: data.name }}></span>
                 <DropdownMenu
                     options={id ? ["Duplicate", "Edit", "Delete"] : ["Duplicate"]}
                     optionIcons={[
@@ -140,10 +141,13 @@
         justify-content: space-between;
         padding: 8px;
         flex-grow: 1;
+        flex-shrink: 1;
     }
     .comp-name {
-        max-width: 200px;
+        width: calc(100% - 24px);
+        white-space: nowrap;
         overflow: hidden;
+        text-overflow: ellipsis;
     }
     .component-list-item {
         display: flex;
@@ -175,5 +179,6 @@
         overflow: hidden;
         mask-image: linear-gradient(90deg, rgba(0,0,0,1) 86%, rgba(0,0,0,0) 100%);
         mask-size: cover;
+        flex-shrink: 0;
     }
 </style>
