@@ -8,12 +8,9 @@ export const truncate = (
     function updateTruncation() {
 
 
-        const maxWidth = node.offsetWidth; // Get the container width
-        let truncatedText = text; // Add ellipsis to the text
-        node.textContent = text; // Set to full text to measure
-
-        console.log("maxWidth", maxWidth);
-        console.log("node.scrollWidth", node.scrollWidth);
+        const maxWidth = node.offsetWidth;
+        let truncatedText = text;
+        node.textContent = text;
 
         while (node.scrollWidth > maxWidth && truncatedText.length > 0) {
             truncatedText = truncatedText.slice(0, -1);

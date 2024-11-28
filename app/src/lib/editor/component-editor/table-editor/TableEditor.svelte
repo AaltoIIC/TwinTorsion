@@ -9,6 +9,7 @@
     import { currentComponentJSON } from "$lib/stores/stores";
     import { onMount } from "svelte";
     import TableCell from "./TableCell.svelte";
+    import { getScreenSize } from "$lib/utils";
 
     let elements: Record<string, any>[];
     let nodeNos: Record<string, string> = {};
@@ -50,6 +51,7 @@
 
     // handle action buttons
     let hoveredElement: string | null = null;
+    let selectedElement: string | null = null;
 
     const handleElementDelete = (elemName: string) => {
         currentComponentJSON.update(val => {
@@ -98,6 +100,9 @@
         });
     };
 
+    // handle mobile view
+    let isMobile = getScreenSize() === "mobile";
+
     onMount(() => {
         document.addEventListener("pointerdown", (e) => {
             pointerdown = true;
@@ -132,8 +137,12 @@
             {/each}
         </tr>
         {#each elements as element (element.name)}
-            <tr on:mouseenter={() => hoveredElement = element.name}
-                class={hoveredElement === element.name ? 'hover' : ''}>
+            <tr on:mouseenter={() => {if (!isMobile) hoveredElement = element.name}}
+                class={(isMobile ?
+                    (selectedElement === element.name ? 'selected' : '')
+                    :
+                    (hoveredElement === element.name ? 'selected' : '')
+                )}>
                 <td class="nodeNo">{nodeNos[element.name]}</td>
                 <TableCell
                     editable={true}
@@ -153,7 +162,9 @@
                         required={possibleParams[element.type]?.required.includes(column)}
                     />
                 {/each}
-                <div class="action-cont">
+                <!-- svelte-ignore a11y-no-static-element-interactions -->
+                <div class="action-cont"
+                    on:mouseleave={() => {selectedElement = null;}}>
                     <div class="action-inner">
                         <button class="btn-action"
                             on:click={() => moveUp(element.name)}>
@@ -173,6 +184,14 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                             </svg>                      
                         </button>
+                        <!-- svelte-ignore a11y-click-events-have-key-events -->
+                        <!-- svelte-ignore a11y-no-static-element-interactions -->
+                        <div class="mobile-select-btn"
+                            on:click={() => {selectedElement = element.name}}>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                            </svg>                              
+                        </div>
                     </div>
                 </div>
             </tr>
@@ -224,7 +243,7 @@
         width: 28px;
         height: 28px;
         cursor: pointer;
-        visibility: hidden;
+        display: none;
         margin: 0;
     }
     .btn-action:first-of-type {
@@ -237,8 +256,8 @@
         border-top-right-radius: var(--main-border-radius);
         border-bottom-right-radius: var(--main-border-radius);
     }
-    tr.hover .btn-action {
-        visibility: visible;
+    tr.selected .btn-action {
+        display: block;
     }
     .btn-action svg {
         width: 14px;
@@ -386,7 +405,35 @@
     tr {
         background-color: white;
     }
-    tr.hover {
+    tr.selected {
         background-color: rgb(250, 250, 250);
+    }
+    .mobile-select-btn {
+        display: none;
+    }
+
+    @media (max-width: 600px) {
+
+        .action-inner {
+            left: calc(100vw - 116px);
+            border-radius: 50px;
+        }
+        .mobile-select-btn {
+            background-color: white;
+            border: var(--main-border);
+            width: 28px;
+            height: 28px;
+            box-sizing: border-box;
+            border-radius: var(--main-border-radius);
+            margin: -2px 0 0 55px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .mobile-select-btn svg {
+            width: 14px;
+            height: 14px;
+            color: rgba(0, 0, 0, 0.7);
+        }
     }
 </style>

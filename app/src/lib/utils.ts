@@ -17,6 +17,7 @@ import {
 } from "./types/typeguards";
 import { nameElement } from "./editor/component-editor/componentHelpers";
 import _ from 'lodash';
+import { browser } from '$app/environment';
 
 // function to find an element in the current system JSON based on
 // its name found in connection strings
@@ -310,5 +311,19 @@ export const fetchComponents = async (twinbaseUrl: string) => {
     } catch (error) {
         console.error(error);
         return [];
+    }
+}
+
+export const getScreenSize = () => {
+    if (browser) {
+        if (window.innerWidth < 1048) {
+            return 'mobile';
+        } else if (window.innerWidth < 1200) {
+            return 'tablet';
+        } else {
+            return 'desktop';
+        }
+    } else {
+        return 'server';
     }
 }

@@ -67,6 +67,12 @@
 {/if}
 
 <style>
+    .notification-inner p {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: calc(100vw - 125px);
+    }
     .icon-cont {
         width: 20px;
         height: 20px;
@@ -91,7 +97,7 @@
         top: 68px;
         right: 0;
         margin: 15px;
-        z-index: 10000000;
+        z-index: 100000000000000000000000000000000000000000000000000000000000;
         background-color: var(--main-color);
         display: flex;
         align-items: center;

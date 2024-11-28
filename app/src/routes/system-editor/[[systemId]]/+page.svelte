@@ -24,11 +24,17 @@
         handleSystemNameChange,
         checkIfOTCompatible
      } from '$lib/editor/system-editor/systemHelpers';
-    import { importSystem, exportJSON } from "$lib/utils";
+    import {
+        importSystem,
+        exportJSON,
+        getScreenSize
+    } from "$lib/utils";
     import type { SystemType } from '$lib/types/types';
     import { goto } from '$app/navigation';
     import _ from 'lodash';
     import Resize from '$lib/Resize.svelte';
+    import MobileNamePopup from '$lib/mobile/MobileNamePopup.svelte';
+    import MobileCompListPopup from '$lib/mobile/MobileCompListPopup.svelte';
 
     let fileInput: HTMLInputElement;
     let JSONEditorComponent: SvelteComponent;
@@ -125,6 +131,18 @@
         }
     }
 
+    // handle different screen sizes
+    let mobileNamePopup: SvelteComponent;
+    let mobileCompListPopup: SvelteComponent;
+    let isMobile = false;
+    let defaultFirstSize = 360;
+    const screenSize = getScreenSize();
+    if (screenSize === 'tablet') {
+        defaultFirstSize = 275;
+    } else if (screenSize === 'mobile') {
+        defaultFirstSize = 0;
+        isMobile = true;
+    }
 </script>
 <svelte:head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -135,13 +153,15 @@
 <div class="main-screen">
     <Resize
         direction="horizontal"
-        defaultFirstSize={360}
-        minFirstSize={270}
+        {defaultFirstSize}
+        minFirstSize={275}
         maxFirstSize={420}>
         <svelte:fragment slot="1">
-            <Sidebar>
-                <ComponentsList />
-            </Sidebar>
+            {#if !isMobile}
+                    <Sidebar>
+                        <ComponentsList />
+                    </Sidebar>
+            {/if}
         </svelte:fragment>
         <svelte:fragment slot="2">
             <TopBar>
@@ -152,33 +172,52 @@
                         <svg class="icon-back" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
                           </svg>              
-                        Back
+                        {#if !isMobile}
+                            Back
+                        {/if}
                     </span>
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
-                    <!-- svelte-ignore a11y-no-static-element-interactions -->
-                    <span on:click={() => fileInput.click()} class="link-element import-btn">
-                        Import
-                    </span>
-                    <input type="file" class="hidden"
-                        name="file"
-                        bind:this={fileInput}
-                        on:change={(e) => importSystem(e, false)}
-                        accept=".tors">
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
-                    <!-- svelte-ignore a11y-no-static-element-interactions -->
-                    <span
-                        on:click={handleAnalysis}
-                        class="link-element">
-                        Analysis
-                    </span>
+                    {#if !isMobile}
+                        <!-- svelte-ignore a11y-click-events-have-key-events -->
+                        <!-- svelte-ignore a11y-no-static-element-interactions -->
+                        <span on:click={() => fileInput.click()} class="link-element import-btn">
+                            Import
+                        </span>
+                        <input type="file" class="hidden"
+                            name="file"
+                            bind:this={fileInput}
+                            on:change={(e) => importSystem(e, false)}
+                            accept=".tors">
+                        <!-- svelte-ignore a11y-click-events-have-key-events -->
+                        <!-- svelte-ignore a11y-no-static-element-interactions -->
+                        <span
+                            on:click={handleAnalysis}
+                            class="link-element analysis-btn">
+                            Analysis
+                        </span>
+                    {:else}
+                        <span class="mobile-icons">
+                            <Button color="transparent" onClick={() => {mobileCompListPopup ? mobileCompListPopup.open() : ''}}>
+                                <svg class="icon add-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                </svg>
+                            </Button>
+                            <Button color="transparent" onClick={() => {mobileNamePopup ? mobileNamePopup.open() : ''}}>
+                                <svg class="icon edit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                                </svg>                              
+                            </Button>
+                        </span>
+                    {/if}
                 </svelte:fragment>
                 <svelte:fragment slot="name">
-                    <NameField
-                        text="System"
-                        value={systemName}
-                        isError={isNameError}
-                        onInput={(text) => isNameError = !handleSystemNameChange(text, $currentSystemJSON.id)}
-                    />
+                    {#if !isMobile}
+                        <NameField
+                            text="System"
+                            value={systemName}
+                            isError={isNameError}
+                            onInput={(text) => isNameError = !handleSystemNameChange(text, $currentSystemJSON.id)}
+                        />
+                    {/if}
                 </svelte:fragment>
                 <svelte:fragment slot="buttons">
                     <DropdownButton
@@ -188,7 +227,9 @@
                         options={["Download Tors file"]}
                         optionIcons={['<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>',
                         ]}>
-                        Export
+                        {#if !isMobile}
+                            Export
+                        {/if}
                     </DropdownButton>
                     <Button
                         isActive={!(isJSONError || isNameError || isStructureError)}
@@ -214,28 +255,56 @@
                             bind:textContent={JSONEditorText}
                             onInput={(text) => {isJSONError = !handleJSONEditing(text, $currentSystemJSON.id)}} />
                     </svelte:fragment>
-                    <div class="analyze-btn-cont">
-                        <Button
-                            lightMode={true}
-                            color="var(--main-dark-color)"
-                            isActive={!(isJSONError || isNameError || isStructureError)}
-                            onClick={handleAnalysis}
-                            icon={`<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23-.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
-                                </svg>`}>
-                            Analyze System
-                            <svg class="icon-analyze" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                            </svg>              
-                        </Button>
-                    </div>
                 </Resize>
             </div>
         </svelte:fragment>
     </Resize>
+    <div class="analyze-btn-cont">
+        <Button
+            lightMode={true}
+            color="var(--main-dark-color)"
+            isActive={!(isJSONError || isNameError || isStructureError)}
+            onClick={handleAnalysis}
+            icon={`<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23-.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
+                </svg>`}>
+            Analyze System
+            <svg class="icon-analyze" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+            </svg>              
+        </Button>
+    </div>
 </div>
 <DialogBox bind:this={dialogBox} />
+<!-- mobile popups -->
+{#if isMobile}
+<MobileNamePopup
+    bind:this={mobileNamePopup}
+    text="System Name"
+    value={systemName}
+    isError={isNameError}
+    onInput={(text) => isNameError = !handleSystemNameChange(text, $currentSystemJSON.id)}
+/>
+<MobileCompListPopup
+    bind:this={mobileCompListPopup}
+/>
+
+{/if}
 <style>
+    .mobile-icons {
+        margin-left: -10%;
+    }
+    .edit-icon {
+        width: 20px;
+        height: 20px;
+        margin: 0 0 -2px 0;
+    }
+    .add-icon {
+        width: 22px;
+        height: 22px;
+        margin: 0 0 -2px 0;
+    }
+
     .main-editor-cont {
         height: calc(100% - 68px);
     }
@@ -274,7 +343,7 @@
         height: 100vh;
     }
     @media (max-width: 1200px) {
-        .import-btn {
+        .import-btn, .analysis-btn {
             display: none;
         }
     }

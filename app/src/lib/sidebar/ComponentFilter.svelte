@@ -159,12 +159,20 @@
     }
     .filter-entry input {
         margin-right: 10px;
+        flex-shrink: 0;
     }
     .filter-entry {
         display: flex;
         align-items: center;
         padding: 5px 10px;
         cursor: pointer;
+    }
+    .filter-entry p {
+        flex-shrink: 1;
+        flex-grow: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     .filter-option-list {
         height: fit-content;
@@ -202,6 +210,9 @@
     .filter-selection {
         font-weight: 550;
         color: var(--main-dark-color);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     .filter-head {
         cursor: pointer;

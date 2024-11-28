@@ -8,7 +8,8 @@
     import {
         trimText,
         isTwinbaseUrl,
-        trimUrl
+        trimUrl,
+        getScreenSize
     } from "$lib/utils";
     import type { SvelteComponent } from "svelte";
 
@@ -71,6 +72,9 @@
             return twinbases;
         });
     }
+
+    let isMobile = getScreenSize() === 'mobile';
+
 </script>
 <Popup
     bind:this={popup}
@@ -143,7 +147,7 @@
         border: none;
         cursor: pointer;
         padding: 0;
-        margin: 0 20px 0 0;
+        margin: 0 20px;
     }
     .btn-delete svg {
         width: 16px;
@@ -196,7 +200,7 @@
         color: rgba(0, 0, 0, 0.6);
         margin: 14px 0;
         border: none;
-        width: 400px;
+        width: calc(100% - 80px);
         background-color: transparent;
     }
     .add-new input:focus {
@@ -250,6 +254,12 @@
     }
     .twinbase p {
         font-size: 14px;
+        flex-shrink: 1;
+        flex-grow: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-right: 8px;
     }
     .default-txt {
         color: rgba(255, 255, 255, 0.9);
@@ -258,12 +268,19 @@
         padding: 2px 6px;
         border-radius: 50px;
         font-weight: 400;
-        margin-right: 4px;
+        margin: 0 4px;
     }
     .twinbases-list-cont {
-        width: 500px;
+        max-width: 500px;
+        width: calc(90vw - 74px);
         height: fit-content;
         max-height: 400px;
         overflow-y: scroll;
+        overflow-x: hidden;
+    }
+    @media (max-width: 1048px) {
+        .twinbases-list-cont {
+            height: 70vh;
+        }
     }
 </style>

@@ -10,7 +10,6 @@
       useSvelteFlow,
       type NodeTypes,
       type Node
-
     } from '@xyflow/svelte';
     import '@xyflow/svelte/dist/style.css';
     import { eventBus } from '$lib/stores/eventBus';
@@ -20,8 +19,10 @@
     import ShaftContinuousNode from './ShaftContinuousNode.svelte';
     import GearNode from './GearNode.svelte';
     import GearboxNode from './GearboxNode.svelte';
-    const { fitView } = useSvelteFlow();
+    import { onMount, onDestroy } from 'svelte';
 
+    const { fitView } = useSvelteFlow();
+  
     const nodeTypes = {
       'Disk': DiskNode,
       'ShaftDiscrete': ShaftDiscreteNode,
@@ -86,7 +87,6 @@
         });
       }
     };
-
 </script>
 <SvelteFlow
   nodes={nodes}
@@ -95,7 +95,6 @@
   on:dragover={onDragOver}
   on:drop={onDrop}
   deleteKey={null}
-  fitView
 >
   <Controls />
   <Background bgColor="rgb(245,245,245)" variant={BackgroundVariant.Dots} gap={28} />

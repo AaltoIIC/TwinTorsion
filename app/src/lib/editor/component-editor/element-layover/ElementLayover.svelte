@@ -340,8 +340,13 @@
         color: rgba(0, 0, 0, 0.9);
         border-radius: var(--main-border-radius);
     }
-
     .main-layover-cont.active {
         display: block;
+    }
+
+    @media (max-width: 1048px) {
+        .main-layover-cont {
+            display: none !important;
+        }
     }
 </style>

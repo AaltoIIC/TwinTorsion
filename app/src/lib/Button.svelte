@@ -57,7 +57,6 @@
     }
     .disabled {
         pointer-events: none !important;
-        background-color: var(--main-color-dark-2) !important;
         opacity: 0.7 !important;
     }
 </style>

@@ -113,6 +113,8 @@
 <style>
     .component-cont {
         min-width: 270px;
+        height: 100%;
+        position: relative;
     }
     .placeholder-list-elem {
         width: calc(100% - 12px);
@@ -161,8 +163,9 @@
     }
     .component-list {
         width: 100%;
-        height: calc(100vh - 137px);
+        height: calc(100% - 89.6px);
         overflow-y: scroll;
+        overflow-x: hidden;
         background: white;
         border-top: var(--main-border);
     }

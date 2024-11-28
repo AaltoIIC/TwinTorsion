@@ -4,6 +4,7 @@
 
     export let maxWidth: Number = 600;
     export let maxHeight: Number = 400;
+    export let padding: string = "22px 42px 16px 32px";
 
     let isOpen = false;
     export const open = () => {
@@ -49,7 +50,11 @@
             on:click={close}>
         </div>
         <div class="main-popup-cont"
-            style={`max-width: ${maxWidth}px; max-height: ${maxHeight}px;`}
+            style={`
+                max-width: ${maxWidth}px;
+                max-height: ${maxHeight}px;
+                padding: ${padding};
+            `}
             bind:this={mainPopupCont}>
             <button class="btn-close"
                 on:click={() => {isOpen = false;}}>
@@ -71,11 +76,11 @@
         height: fit-content;
         box-shadow: var(--main-box-shadow);
         z-index: 10000000000;
-        padding: 22px 42px 16px 32px;
         transition: .3s;
         border-radius: var(--main-border-radius);
         background-color: white;
         opacity: 0;
+        overflow: hidden;
     }
     .viewport-cover {
         position: fixed;
@@ -96,6 +101,7 @@
         position: absolute;
         top: 10px;
         right: 10px;
+        z-index: 10000000000;
     }
     .icon-close {
         width: 18px;

@@ -45,7 +45,9 @@
 
 
     let nofLines = 0;
+    let lineNoWidth = 0;
     $: nofLines = text.split("\n").length;
+    $: lineNoWidth = Math.max((nofLines.toString().length)*7 + 5, 26);
 
     const updateHighlighting = () => {
         highlightedText = Prism.highlight(text, Prism.languages.json, 'json');
@@ -186,8 +188,10 @@
         updateHighlighting();
     });
 </script>
-<div class="main-textarea-cont">
+<div class="main-textarea-cont"
+    style={`padding-left: ${lineNoWidth+26}px;`}>
     <textarea id="editing"
+    style={`left: ${lineNoWidth+26}px;`}
         on:input={handleInput}
         on:keydown={(e) => {handleTab(e); handleCursor();}}
         on:click={handleCursor}
@@ -195,14 +199,16 @@
         on:scroll={handleScroll}
         bind:this={textarea}
         spellcheck="false"></textarea>
-<pre aria-hidden="true" bind:this={pre}><code>{@html highlightedText}</code></pre>
+<pre aria-hidden="true"
+    bind:this={pre}
+    style={`left: ${lineNoWidth+26}px;`}><code>{@html highlightedText}</code></pre>
 <div class="main-line-cont">
     <div class="line-cont-inner" style="transform: translateY({-scrollTop}px);">
         {#each Array.from({ length: nofLines }, (_, i) => i) as i}
             <div class="code-line 
                 {i+1 >= highlightedLines.start && i+1 < highlightedLines.end ? "highlighted" : ""}
                 {activeLine === i ? "active" : ""} line-{i}">
-                <div class="line-number">
+                <div class="line-number" style="width: {lineNoWidth}px;">
                     {i + 1}
                 </div>
             </div>
@@ -215,7 +221,6 @@
 
     .line-number {
         height: 18px;
-        width: 26px;
         background-color: var(--main-grey-color);
         color: rgba(0, 0, 0, 0.5);
         font-size: 14px;
@@ -270,7 +275,7 @@
         position: relative;
         width:100%;
         height: 100%;
-        padding: 0 10px 0 52px;
+        padding: 0 10px 0 0;
         margin: 0;
         overflow: hidden;
         border: none;

@@ -2,7 +2,7 @@
     import { addElement } from "../editor/component-editor/componentHelpers";
     import Button from "$lib/Button.svelte";
 
-
+    export let mobile: boolean = false;
 
     const onDragStart = (event: DragEvent, type: string) => {
         if (!event.dataTransfer) {
@@ -14,7 +14,7 @@
         event.dataTransfer.effectAllowed = 'move';
     };
 </script>
-<div class="element-cont">
+<div class="element-cont {mobile ? 'mobile' : ''}">
     <div class="element-upper">
         <h3>Elements:</h3>
     </div>
@@ -145,6 +145,10 @@
     </div>
 </div>
 <style>
+    .mobile .element-upper h3 {
+        margin-left: 10px;
+    }
+
     .light-txt {
         color: rgba(0, 0, 0, 0.4);
     }
@@ -162,6 +166,8 @@
         font-size: 12px;
     }
     .element-cont {
+        position: relative;
+        height: 100%;
         -moz-user-select: -moz-none;
         -khtml-user-select: none;
         -webkit-user-select: none;
@@ -254,7 +260,6 @@
         align-items: center;
         padding: 0 5px;
         vertical-align: middle;
-        margin-top: 25px;
         z-index: 10;
         position: relative;
     }
@@ -264,9 +269,10 @@
     .element-list {
         width: 100%;
         background: white;
-        height: calc(100vh - 162px);
+        height: calc(100% - 37.2px);
         padding-top: 5px;
         border-top: var(--main-border);
+        overflow: hidden;
     }
     @container element-list-item (width <= 318px) {
         .to-comp-txt {

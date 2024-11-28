@@ -27,7 +27,11 @@
     import { goto } from '$app/navigation';
     import Button from '$lib/Button.svelte';
     import DropdownButton from '$lib/DropdownButton.svelte';
-    import { exportJSON, importComponent } from '$lib/utils';
+    import {
+        exportJSON,
+        importComponent,
+        getScreenSize
+    } from '$lib/utils';
     import NameField from '$lib/NameField.svelte';
     import TopBar from '$lib/TopBar.svelte';
     import Tabs from '$lib/Tabs.svelte';
@@ -37,6 +41,8 @@
         checkElementOrder
     } from '$lib/editor/component-editor/componentHelpers';
     import Resize from '$lib/Resize.svelte';
+    import MobileNamePopup from '$lib/mobile/MobileNamePopup.svelte';
+    import MobileElemListPopup from '$lib/mobile/MobileElemListPopup.svelte';
     
     let fileInput: HTMLInputElement;
     let selectedEditor: string;
@@ -175,6 +181,19 @@
         }
     }
 
+    // handle different screen sizes
+    let mobileNamePopup: SvelteComponent;
+    let mobileElemListPopup: SvelteComponent;
+    let isMobile = false;
+    let defaultFirstSize = 360;
+    const screenSize = getScreenSize();
+    if (screenSize === 'tablet') {
+        defaultFirstSize = 275;
+    } else if (screenSize === 'mobile') {
+        defaultFirstSize = 0;
+        isMobile = true;
+    }
+
 </script>
 <svelte:head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -185,13 +204,15 @@
 <div class="main-screen">
     <Resize 
         direction="horizontal"
-        defaultFirstSize={360}
+        {defaultFirstSize}
         minFirstSize={275}
         maxFirstSize={400}>
         <svelte:fragment slot="1">
-            <Sidebar>
-                <ElementsList />
-            </Sidebar>
+            {#if !isMobile}
+                <Sidebar>
+                    <ElementsList />
+                </Sidebar>
+            {/if}
         </svelte:fragment>
         <svelte:fragment slot="2">
             <TopBar>
@@ -201,33 +222,52 @@
                     <span on:click={handleBack} class="link-element">
                         <svg class="icon-back" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-                        </svg>              
-                        Back
+                        </svg>
+                        {#if !isMobile}             
+                            Back
+                        {/if}
                     </span>
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
-                    <!-- svelte-ignore a11y-no-static-element-interactions -->
-                    <span class="link-element import-btn"
-                        on:click={() => fileInput.click()}>
-                        Import
-                    </span>
-                    <input type="file"
-                        style:display="none"
-                        name="file"
-                        bind:this={fileInput}
-                        on:change={(e) => importComponent(e, false)}
-                        accept=".tors">
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
-                    <!-- svelte-ignore a11y-no-static-element-interactions -->
-                    <span class="link-element analysis-btn"
-                        on:click={handleAnalysis}>
-                        Analysis
-                    </span>
+                    {#if !isMobile}
+                        <!-- svelte-ignore a11y-click-events-have-key-events -->
+                        <!-- svelte-ignore a11y-no-static-element-interactions -->
+                        <span class="link-element import-btn"
+                            on:click={() => fileInput.click()}>
+                            Import
+                        </span>
+                        <input type="file"
+                            style:display="none"
+                            name="file"
+                            bind:this={fileInput}
+                            on:change={(e) => importComponent(e, false)}
+                            accept=".tors">
+                        <!-- svelte-ignore a11y-click-events-have-key-events -->
+                        <!-- svelte-ignore a11y-no-static-element-interactions -->
+                        <span class="link-element analysis-btn"
+                            on:click={handleAnalysis}>
+                            Analysis
+                        </span>
+                    {:else}
+                        <span class="mobile-icons">
+                            <Button color="transparent" onClick={() => {mobileElemListPopup ? mobileElemListPopup.open() : ''}}>
+                                <svg class="icon add-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                </svg>
+                            </Button>
+                            <Button color="transparent" onClick={() => {mobileNamePopup ? mobileNamePopup.open() : ''}}>
+                                <svg class="icon edit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                                </svg>                              
+                            </Button>
+                        </span>
+                    {/if}
                 </svelte:fragment>
                 <svelte:fragment slot="name">
-                    <NameField text="Component"
-                            isError={isNameError} 
-                            bind:value={componentName}
-                            onInput={text => {isNameError = !handleNameChange(text, originalName)}} />
+                    {#if !isMobile}
+                        <NameField text="Component"
+                                isError={isNameError} 
+                                bind:value={componentName}
+                                onInput={text => {isNameError = !handleNameChange(text, originalName)}} />
+                    {/if}
                 </svelte:fragment>
                 <svelte:fragment slot="buttons">
                     <DropdownButton
@@ -237,13 +277,18 @@
                         options={["Download Tors file"]}
                         optionIcons={['<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>',
                         ]}>
-                        Export
+                        {#if !isMobile}
+                            Export
+                        {/if}
                     </DropdownButton>
                     <Button
                         onClick={handleSave}
                         isActive={!isError}
                         icon={'<svg class="icon-save" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>'}>
-                        Save Component
+                        Save 
+                        {#if !isMobile}
+                            Component
+                        {/if}
                     </Button>
                 </svelte:fragment>
             </TopBar>
@@ -275,7 +320,29 @@
         </Resize>
 </div>
 <DialogBox bind:this={dialogBox} />
+<MobileNamePopup
+    bind:this={mobileNamePopup}
+    text="Component"
+    isError={isNameError} 
+    bind:value={componentName}
+    onInput={text => {isNameError = !handleNameChange(text, originalName)}}
+/>
+<MobileElemListPopup bind:this={mobileElemListPopup} />
 <style>
+    .mobile-icons {
+        margin-left: -10%;
+    }
+    .edit-icon {
+        width: 20px;
+        height: 20px;
+        margin: 0 0 -2px 0;
+    }
+    .add-icon {
+        width: 22px;
+        height: 22px;
+        margin: 0 0 -2px 0;
+    }
+
     .main-editor-cont {
         height: calc(100% - 68px);
         width: 100%;
@@ -303,11 +370,6 @@
     }
     @media (max-width: 1300px) {
         .import-btn {
-            display: none;
-        }
-    }
-    @media (max-width: 1200px) {
-        .analysis-btn {
             display: none;
         }
     }

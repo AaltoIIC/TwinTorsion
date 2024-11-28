@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
 
     export let direction: 'vertical' | 'horizontal' = 'horizontal';
-    export let defaultFirstSize: number | null = null;
+    export let defaultFirstSize: number = 220;
     export let defaultSecondSize: number | null = null;
     export let minFirstSize: number | null = null;
     export let maxFirstSize: number | null = null;
@@ -11,45 +11,54 @@
 
     let container: HTMLDivElement;
     let isResizing = false;
+
     
-    // the width or height of the upper or left element
-    let firstSize: number;
+    // the width or height of the element with default size specified
+    let specifiedSize: number = defaultSecondSize || defaultFirstSize;
+    let nonSpecifiedSize: string = '0';
+    $: nonSpecifiedSize =  `calc(100% - ${specifiedSize + 2}px)`;
+    let specifiedSizeIs = defaultSecondSize ? 'second' : 'first';
     let sizeProp = direction === 'horizontal' ? 'width' : 'height';
 
     const resizeEditor = (event: MouseEvent) => {
         if (direction === 'horizontal') {
             const newFirstSize = event.clientX - container.getBoundingClientRect().left;
+            const newSecondSize = container.getBoundingClientRect().width - newFirstSize;
 
             const isMinFirstSizeValid = !minFirstSize || newFirstSize >= minFirstSize;
-            const isMinSecondSizeValid = !minSecondSize || container.getBoundingClientRect().width - newFirstSize >= minSecondSize;
+            const isMinSecondSizeValid = !minSecondSize || newSecondSize >= minSecondSize;
             const isMaxFirstSizeValid = !maxFirstSize || newFirstSize <= maxFirstSize;
-            const isMaxSecondSizeValid = !maxSecondSize || container.getBoundingClientRect().width - newFirstSize <= maxSecondSize;
+            const isMaxSecondSizeValid = !maxSecondSize || newSecondSize <= maxSecondSize;
 
             if (isMinFirstSizeValid && isMinSecondSizeValid && isMaxFirstSizeValid && isMaxSecondSizeValid) {
-                firstSize = newFirstSize;
+                if (specifiedSizeIs === 'first') {
+                    specifiedSize = newFirstSize;
+                } else {
+                    specifiedSize = newSecondSize;
+                }
             }
         } else {
             const newFirstSize = event.clientY - container.getBoundingClientRect().top;
+            const newSecondSize = container.getBoundingClientRect().height - newFirstSize;
 
             const isMinFirstSizeValid = !minFirstSize || newFirstSize >= minFirstSize;
-            const isMinSecondSizeValid = !minSecondSize || container.getBoundingClientRect().height - newFirstSize >= minSecondSize;
+            const isMinSecondSizeValid = !minSecondSize || newSecondSize >= minSecondSize;
             const isMaxFirstSizeValid = !maxFirstSize || newFirstSize <= maxFirstSize;
-            const isMaxSecondSizeValid = !maxSecondSize || container.getBoundingClientRect().height - newFirstSize <= maxSecondSize;
+            const isMaxSecondSizeValid = !maxSecondSize || newSecondSize <= maxSecondSize;
 
             if (isMinFirstSizeValid && isMinSecondSizeValid && isMaxFirstSizeValid && isMaxSecondSizeValid) {
-                firstSize = newFirstSize;
+                if (specifiedSizeIs === 'first') {
+                    specifiedSize = newFirstSize;
+                } else {
+                    specifiedSize = newSecondSize;
+                }
             }
         }
     }
 
     onMount(() => {
-        if (defaultFirstSize) {
-            firstSize = defaultFirstSize;
-        } else if (defaultSecondSize) {
-            firstSize = container.getBoundingClientRect().height - defaultSecondSize;
-        } else {
-            firstSize = 220;
-        }
+        window.addEventListener('mouseup', () => {isResizing = false;});
+        window.addEventListener('dragstart', () => {isResizing = false;});
     });
 
 </script>
@@ -57,13 +66,13 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div class="main-section {direction}"
     bind:this={container}
-    on:mouseup={() => {isResizing = false;}}
     on:mousemove={(event) => {
         if (isResizing) {
             resizeEditor(event);
         }
     }}>
-    <div class="child child-one" style={`${sizeProp}: ${firstSize}px;`}>
+    <div class="child child-one" style={
+        `${sizeProp}: ${specifiedSizeIs === 'first' ? `${specifiedSize}px` : nonSpecifiedSize};`}>
         <slot name="1"></slot>
     </div>
     <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -86,7 +95,8 @@
 
         </div>
     </div>
-    <div class="child child-two" style={`${sizeProp}: calc(100% - ${firstSize + 2}px);`}>
+    <div class="child child-two" style={
+        `${sizeProp}: ${specifiedSizeIs === 'second' ? `${specifiedSize}px` : nonSpecifiedSize};`}>
         <slot name="2"></slot>
     </div>
 </div>
