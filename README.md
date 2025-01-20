@@ -1,7 +1,7 @@
 # <img src="https://github.com/AaltoIIC/TwinTorsion/blob/main/docs/images/logo.svg?raw=true" height="32px" /> TwinTorsion
 TwinTorsion is a framework for collaborative design and torsional vibration analysis of powertrains with an editor to aid with the optimization of designs to maximize efficiency.
 
-![](https://raw.githubusercontent.com/AaltoIIC/OpenTorsion-Interface/59c0834bb506e4073082b3b6eba06e7383764853/docs/images/readme-button.svg)
+[![](https://raw.githubusercontent.com/AaltoIIC/OpenTorsion-Interface/59c0834bb506e4073082b3b6eba06e7383764853/docs/images/readme-button.svg)](https://twintorsion.aalto.fi)
 
 [![GitHub stars](https://img.shields.io/github/stars/AaltoIIC/TwinTorsion.svg)](https://github.com/AaltoIIC/OpenTorsion-Interface) [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/AaltoIIC/OpenTorsion-Interface/blob/main/LICENSE)
 
