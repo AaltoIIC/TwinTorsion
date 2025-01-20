@@ -297,12 +297,12 @@
     .edit-icon {
         width: 20px;
         height: 20px;
-        margin: 0 0 -2px 0;
+        margin: 0 0 -5px 0;
     }
     .add-icon {
         width: 22px;
         height: 22px;
-        margin: 0 0 -2px 0;
+        margin: 0 0 -6px 0;
     }
 
     .main-editor-cont {

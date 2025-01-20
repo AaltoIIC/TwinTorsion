@@ -19,7 +19,7 @@
         {#each texts as text, i}
             <span class="link">
                 <Button
-                    color="rgba(0, 0, 0, 0.03)"
+                    color="var(--main-color-tr-2)"
                     textColor="rgba(0, 0, 0, 0.7)"
                     onClick={() => {window.open(links[i], '_blank')}}>
                     {text}

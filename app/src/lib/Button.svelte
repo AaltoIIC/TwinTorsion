@@ -33,8 +33,15 @@
         box-shadow: var(--main-shadow);
     }
     .main-text {
-        padding: 8.5px 14px 9px 12px;
+        padding: 0 14px 0 12px;
         font-weight: 500;
+        line-height: 34px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .main-text:empty {
+        padding: 0 1.5px;
     }
     .main-icon {
         width: 18px;
@@ -42,6 +49,7 @@
         padding: 8px 6px 13px 8px;
         border-right: solid 2px rgba(0, 0, 0, 0.04);
         margin: 0 -2px -5px 0;
+        flex-shrink: 0;
     }
     button {
         padding: 10px 12px;
@@ -51,6 +59,8 @@
         font-family: 'Inter', sans-serif;
         border-radius: 50px;
         border: none;
+        display: flex;
+        align-items: center;
     }
     button:hover {
         filter: brightness(1.05);

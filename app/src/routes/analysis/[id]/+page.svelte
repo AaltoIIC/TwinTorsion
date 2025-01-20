@@ -14,8 +14,12 @@
     import System3dModel from "$lib/System3dModel.svelte";
     import Button from "$lib/Button.svelte";
     import PdfTemplate from "$lib/analysis/PdfTemplate.svelte";
-    import { formatDate, trimText } from "$lib/utils";
+    import { formatDate, trimText, getScreenSize } from "$lib/utils";
     import { API_URL } from "../../../config.js";
+
+    // handle different screen sizes
+    const screenSize = getScreenSize();
+    const isMobile = screenSize === "mobile";
     
     // load the system or component data from the store
     export let data;
@@ -102,7 +106,7 @@
             {/each}
         {:else if isError}
             <div class="error-cont">
-                <img src="./../error.png" alt="Error illustration">
+                <img src="./../../../error.png" alt="Error illustration">
                 <div class="error-desc">
                     <p>There was an error while fetching the analysis results.</p>
                     <Button
@@ -129,14 +133,18 @@
                 <svg class="icon-back" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
                 </svg>
-                Back to Component Editor
+                {#if !isMobile}
+                    Back to Component Editor
+                {/if}
             </a>
         {:else}
             <a href={`/system-editor/${$currentSystemJSON.id}`}>
                 <svg class="icon-back" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
                 </svg>
-                Back to System Editor
+                {#if !isMobile}
+                    Back to System Editor
+                {/if}
             </a>
         {/if}
     </div>
@@ -150,47 +158,49 @@
         icon='<svg class="icon-down" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" /></svg>'
         onClick={downloadAnalysisResults}
         isActive={plots !== undefined && !isError && pdfReady}>
-        {pdfText}     
+        {isMobile ? '' : pdfText}     
     </Button>
 </div>
-<Sidebar>
-    <div class="system-info">
-        <System3dModel
-            data={$currentSystemJSON.json}
-            size={240}
-        />
-        {#if isComponent}
-            <h2>{trimText($currentSystemJSON.json.components[0].name, 20)}</h2>
-            <p>Analyzed at {formatDate($currentSystemJSON.json.date)}</p>
-            <p>{$currentSystemJSON.json.components.reduce(
-                (prevSum, currentComp) => (prevSum + currentComp.elements.length),
-                0)}
-                elements
-            </p>
-        {:else}
-            <h2>{trimText($currentSystemJSON.json.name, 20)}</h2>
-            <p>Created at {formatDate($currentSystemJSON.json.date)}</p>
-            <p>{$currentSystemJSON.json.components.reduce(
-                (prevSum, currentComp) => (prevSum + currentComp.elements.length),
-                0)}
-                elements
-            </p>
-            <p>{$currentSystemJSON.json.components.length} components</p>
-        {/if}
-    </div>
-    <h4 class="plots-header">Analysis Plots:</h4>
-    <ul class="main-menu">
-        {#if plots}
-            {#each plots as {name}}
-                <li>
-                    <a href={`#${name.replaceAll(' ', '')}`}>{name}</a>
-                </li>
-            {/each}
-        {:else if !isError}
-            <li class="loading"></li>
-        {/if}
-    </ul>
-</Sidebar>
+{#if !isMobile}
+    <Sidebar>
+        <div class="system-info">
+            <System3dModel
+                data={$currentSystemJSON.json}
+                size={240}
+            />
+            {#if isComponent}
+                <h2>{trimText($currentSystemJSON.json.components[0].name, 20)}</h2>
+                <p>Analyzed at {formatDate($currentSystemJSON.json.date)}</p>
+                <p>{$currentSystemJSON.json.components.reduce(
+                    (prevSum, currentComp) => (prevSum + currentComp.elements.length),
+                    0)}
+                    elements
+                </p>
+            {:else}
+                <h2>{trimText($currentSystemJSON.json.name, 20)}</h2>
+                <p>Created at {formatDate($currentSystemJSON.json.date)}</p>
+                <p>{$currentSystemJSON.json.components.reduce(
+                    (prevSum, currentComp) => (prevSum + currentComp.elements.length),
+                    0)}
+                    elements
+                </p>
+                <p>{$currentSystemJSON.json.components.length} components</p>
+            {/if}
+        </div>
+        <h4 class="plots-header">Analysis Plots:</h4>
+        <ul class="main-menu">
+            {#if plots}
+                {#each plots as {name}}
+                    <li>
+                        <a href={`#${name.replaceAll(' ', '')}`}>{name}</a>
+                    </li>
+                {/each}
+            {:else if !isError}
+                <li class="loading"></li>
+            {/if}
+        </ul>
+    </Sidebar>
+{/if}
 <PdfTemplate
     data={$currentSystemJSON.json}
     plots={plots}
@@ -334,5 +344,30 @@
         font-weight: 550;
         color: rgba(0, 0, 0, 0.9);
         transform: translateX(-50%);
+    }
+    @media (max-width: 1024px) {
+        .main-top-bar {
+            width: 100%;
+            left: 0;
+        }
+        main {
+            width: 100%;
+            left: 0;
+        }
+
+        .main-top-bar {
+            z-index: 1000;
+        }
+        .error-cont {
+            width: auto;
+            flex-direction: column;
+            transform: translateY(-75%);
+        }
+        .error-desc {
+            border-left: none;
+        }
+        .tile {
+            width: auto;
+        }
     }
 </style>

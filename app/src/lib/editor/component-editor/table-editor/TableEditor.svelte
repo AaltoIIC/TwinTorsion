@@ -102,7 +102,6 @@
 
     // handle mobile view
     let isMobile = getScreenSize() === "mobile";
-
     onMount(() => {
         document.addEventListener("pointerdown", (e) => {
             pointerdown = true;
@@ -110,6 +109,10 @@
         document.addEventListener("click", (e) => {
             if (e.target !== addElementButton) {
                 isAddLayoverOpen = false;
+            }
+
+            if (!(e.target as HTMLElement).hasAttribute("data-mobilebtn")) {
+                selectedElement = null;
             }
         });
         document.addEventListener("dragstart", (e) => {
@@ -124,6 +127,7 @@
             }
         });
     });
+
 </script>
 
 <div class="table-outer"
@@ -163,14 +167,13 @@
                     />
                 {/each}
                 <!-- svelte-ignore a11y-no-static-element-interactions -->
-                <div class="action-cont"
-                    on:mouseleave={() => {selectedElement = null;}}>
+                <div class="action-cont">
                     <div class="action-inner">
                         <button class="btn-action"
                             on:click={() => moveUp(element.name)}>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18" />
-                            </svg>                                                   
+                            </svg>
                         </button>
                         <button class="btn-action"
                             on:click={() => moveDown(element.name)}>
@@ -187,7 +190,8 @@
                         <!-- svelte-ignore a11y-click-events-have-key-events -->
                         <!-- svelte-ignore a11y-no-static-element-interactions -->
                         <div class="mobile-select-btn"
-                            on:click={() => {selectedElement = element.name}}>
+                            data-mobilebtn="true"
+                            on:click={() => {selectedElement = element.name;}}>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
                             </svg>                              
@@ -298,6 +302,7 @@
         border: var(--main-border);
         border-radius: var(--main-border-radius);
         display: none;
+        z-index: 100;
     }
     .add-layover.down {
         top: 0;
@@ -316,6 +321,7 @@
         text-align: left;
         cursor: pointer;
         width: 100%;
+        z-index: 10000;
     }
     .add-layover button:hover {
         color: rgb(0, 0, 0);
@@ -425,7 +431,9 @@
             height: 28px;
             box-sizing: border-box;
             border-radius: var(--main-border-radius);
-            margin: -2px 0 0 55px;
+            margin: 0;
+            position: relative;
+            right: -55px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -434,6 +442,15 @@
             width: 14px;
             height: 14px;
             color: rgba(0, 0, 0, 0.7);
+            margin: 7px;
+            pointer-events: none;
+        }
+        .main-table-editor {
+            margin-bottom: 62px;
+        }
+        th {
+            position: relative;
+            z-index: 1000;
         }
     }
 </style>

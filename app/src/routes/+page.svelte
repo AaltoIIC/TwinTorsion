@@ -155,6 +155,10 @@
         max-width: 975px;
         min-height: calc(100vh - 214px);
     }
+    .controls {
+        display: flex;
+        gap: 6px;
+    }
     .controls button {
         background-color: var(--main-dark-color);
         border: none;
@@ -163,12 +167,13 @@
         height: 34.5px;
         color: rgba(255, 255, 255, 0.9);
         cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     .controls button svg {
         width: 18px;
         height: 18px;
-        margin: 0 0 -3.5px -0.5px;
-
     }
     .title-cont {
         display: flex;
