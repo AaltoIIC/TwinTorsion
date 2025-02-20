@@ -28,3 +28,6 @@ Usage doesn't require you to register, but your systems and components are saved
 
 ## Contact:
 The software is developed and maintained by the [DigiTwin Lab](https://www.aalto.fi/en/aiic/digitwin "DigiTwin Lab") at Aalto University.
+
+## Authors:
+Albert Dömötör and Riku Ala-Laurinaho
