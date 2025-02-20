@@ -13,7 +13,7 @@ Features include:
 - Analyzing systems and components
 
 ## Usage:
-The App is deployed at [TwinTorsion.aalto.fi](TwinTorsion.aalto.fi). Please feel free to give it a try. 
+The App is deployed at [TwinTorsion.aalto.fi](https://TwinTorsion.aalto.fi). Please feel free to give it a try. 
 
 Usage doesn't require you to register, but your systems and components are saved locally in the browser.
 
